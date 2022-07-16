@@ -1,0 +1,27 @@
+---
+name: Validate Conventional PR
+
+on:
+    pull_request:
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+
+    generate-tag:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Validates the pull request
+              uses: Namchee/conventional-pr@master
+              with:
+                  access_token: ${{ secrets.GITHUB_TOKEN }}
+                  close: true
+                  label: invalid-rejected-pr # Label to mark invlaid pull requests
+                  draft: true # Relax pull request validations for draft PRs
+                  bot: true
+                  body: true
+                  maximum_file_change: 14 # TODO: To be defined later
+                  report: true
+#                  tittle_pattern: '^(.*)$' # Title pattern to match, TODO: To be defined

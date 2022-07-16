@@ -1,0 +1,9 @@
+*                            @HBOCodeLabs/sre-1
+
+.github/METADATA.yaml        @HBOCodeLabs/dp-security
+
+TaskFile.yaml                @alex.torres@warnermedia.com
+
+.pre-commit-config.yaml      @alex.torres@warnermedia.com
+
+scripts/**/*.sh              @alex.torres@warnermedia.com

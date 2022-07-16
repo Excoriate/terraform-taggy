@@ -1,0 +1,24 @@
+---
+name: Validate GH Labels
+
+on:
+    pull_request:
+        types: [opened, labeled, unlabeled, synchronize]
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+
+    validate-labels:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Validate Labels
+              uses: NathanielHill/check-pr-label-action@v4.0.0
+              with:
+                  github-token: ${{ secrets.GITHUB_TOKEN }}
+                  valid-labels: bug, enhancement, feature, documentation, refactor, test, proposal, chore
