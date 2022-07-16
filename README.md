@@ -1,5 +1,5 @@
 <h1 align="center">
-  <img alt="logo" src="https://blogs.vmware.com/cloudprovider/files/2019/04/og-image-8b3e4f7d-blog-aspect-ratio.png" width="224px"/><br/>
+  <img alt="logo" src="https://forum.huawei.com/enterprise/en/data/attachment/forum/202204/21/120858nak5g1epkzwq5gcs.png" width="224px"/><br/>
   Terraform Taggy
 </h1>
 <p align="center">An easy way to address meaninful tags, <b>enforce conventions</b> validate metadata, <b>and identify IAC resources :)</b>.<br/><br/>
