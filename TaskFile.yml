@@ -3,6 +3,7 @@ version: '3'
 
 tasks:
     pre-commit:
+        deps: [recipe-minimal-tf, recipe-minimal-terratest]
         cmds:
             - pre-commit run --show-diff-on-failure --color always --all-files {{.CLI_ARGS}} # Pass arguments using -- <arg1> <arg2> ...
 
@@ -16,3 +17,9 @@ tasks:
         dir: tests/terratest
         cmds:
             - go test -v ./...
+
+    recipe-config-enforced-tf:
+        dir: terraform/examples/recipe-config-enforced
+        cmds:
+            - terraform init
+            - terraform plan -var-file config/terraform.tfvars

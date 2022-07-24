@@ -29,33 +29,44 @@ EOF
 }
 
 
-variable "enforced_tags"{
+variable "enforced_tags_default"{
   type = map(string)
   default = {}
   description =<<EOF
-Set of tags, that will be enforced. The list of enforced tags are:
+Set of tags, that will be enforced by default. The list of enforced tags are:
 - name (the name of the resource)
 - application (application, service or feature)
 - owner (company or person accountable for these resources)
 EOF
-  validation {
-    condition = alltrue([
-      length(trimspace(lookup(var.enforced_tags, "name", ""))) > 0,
-      length(trimspace(lookup(var.enforced_tags, "application", ""))) > 0,
-      length(trimspace(lookup(var.enforced_tags, "owner", ""))) > 0
-    ])
-    error_message = "Tags name, application and owner are always mandatory."
-  }
+}
+
+variable "enforced_tags_custom" {
+ type = map(string)
+  default = null
+  description =<<EOF
+Set of tags, based on the specific module or company's needs. Its enforcement is
+completely optional. If so, it's required to be set in the main
+configuration input variable (`var.config`) setting the option
+`fail_on_enforced_tags=true`
+EOF
 }
 
 variable "config"{
   type =object({
     force_lower_case = bool # If true, it'll ensure that all tags are lower case.
     force_upper_case = bool # If true, it'll ensure that all tags are upper case.
+    fail_on_enforced_tags_default = bool
+    fail_on_enforced_tags = bool
+    enforced_tags_custom_keys = list(string)
+    enforced_tags_convention_doc_ref = string
   })
   default = {
     force_lower_case = false
     force_upper_case = false
+    fail_on_enforced_tags_default = false
+    fail_on_enforced_tags = false
+    enforced_tags_custom_keys = []
+    enforced_tags_convention_doc_ref = null
   }
   description =<<EOF
 Configuration of this module.

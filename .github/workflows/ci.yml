@@ -17,6 +17,8 @@ jobs:
                 include:
                     - name: recipe-minimal
                       work_dir: terraform/examples/recipe-minimal
+                    - name: recipe-config-enforced
+                      work_dir: terraform/examples/recipe-config-enforced
                     # Add more recipes if any, here...
 
 
@@ -59,9 +61,8 @@ jobs:
             fail-fast: false
             matrix:
                 include:
-                    - name: recipe-minimal
+                    - name: recipe-terratest
                       work_dir: tests/terratest
-                      # Add more recipes if any, here...
 
         runs-on: ubuntu-latest
         defaults:
@@ -90,6 +91,10 @@ jobs:
               run: |
                   go fmt ./...
 
-            - name: Test
+            - name: Test recipe minimal
               run: |
-                  go test -count=1 -v -cover -race -timeout 120s ./...
+                  go test -count=1 -v -cover -race -timeout 120s recipe_minimal_test.go
+
+            - name: Test config enforced
+              run: |
+                  go test -count=1 -v -cover -race -timeout 120s recipe_config_enforced_test.go

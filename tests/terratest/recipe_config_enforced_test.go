@@ -7,9 +7,9 @@ import (
 	"testing"
 )
 
-func TestRecipeMinimal(t *testing.T) {
+func TestConfigEnforcedTest(t *testing.T) {
 	t.Parallel()
-	recipe := "recipe-minimal"
+	recipe := "recipe-config-enforced"
 
 	targetModuleDir := environment.RecipeFolderExistsAndReturn(t, recipe)
 	t.Logf("Target module is %s", targetModuleDir)
