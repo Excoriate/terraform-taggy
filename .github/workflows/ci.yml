@@ -21,6 +21,8 @@ jobs:
 
 
         runs-on: ubuntu-latest
+        defaults:
+            working-directory: ${{ matrix.work_dir }}
 
         steps:
             - name: Checkout Repository
@@ -34,7 +36,6 @@ jobs:
 
 
             - name: Terraform Init
-              working-directory: ${{ matrix.work_dir }}
               run: |
                   rm -f .terraform.lock.hcl
                   terraform get
@@ -43,7 +44,6 @@ jobs:
                   terraform init -backend=false
 
             - name: Terraform Plan
-              working-directory: ${{ matrix.work_dir }}
               run: |
                   terraform plan \
                       -var-file=config/terraform.tfvars \
@@ -62,8 +62,9 @@ jobs:
                       work_dir: tests/terratest
                       # Add more recipes if any, here...
 
-
         runs-on: ubuntu-latest
+        defaults:
+            working_directory: ${{ matrix.work_dir }}
 
         steps:
             - name: Checkout Repository
