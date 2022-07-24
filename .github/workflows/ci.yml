@@ -22,7 +22,8 @@ jobs:
 
         runs-on: ubuntu-latest
         defaults:
-            working-directory: ${{ matrix.work_dir }}
+            run:
+                working-directory: ${{ matrix.work_dir }}
 
         steps:
             - name: Checkout Repository
@@ -64,7 +65,8 @@ jobs:
 
         runs-on: ubuntu-latest
         defaults:
-            working-directory: ${{ matrix.work_dir }}
+            run:
+                working-directory: ${{ matrix.work_dir }}
 
         steps:
             - name: Checkout Repository
