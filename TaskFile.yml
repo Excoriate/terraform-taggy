@@ -5,3 +5,15 @@ tasks:
     pre-commit:
         cmds:
             - pre-commit run --show-diff-on-failure --color always --all-files {{.CLI_ARGS}} # Pass arguments using -- <arg1> <arg2> ...
+
+    recipe-minimal-tf:
+        dir: terraform/examples/recipe-minimal
+        cmds:
+            - terraform init
+            - terraform plan -var-file config/terraform.tfvars
+
+    recipe-minimal-terratest:
+        dir: tests/terratest
+        cmds:
+          - go test -v ./...
+

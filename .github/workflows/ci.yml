@@ -1,0 +1,96 @@
+---
+name: 'CI: Terratest'
+
+on: [push, pull_request]
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+    ci:
+        name: CI recipes TF
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: recipe-minimal
+                      work_dir: terraform/examples/recipe-minimal
+              # Add more recipes if any, here...
+
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Test
+              run: |
+                  go test -v -cover -race -timeout 120s ./...
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v1
+              with:
+                  terraform_version: 1.2.5
+                  terraform_wrapper: false
+
+
+            - name: Terraform Init
+              working-directory: ${{ matrix.work_dir }}
+              run: |
+                  rm -f .terraform.lock.hcl
+                  terraform get
+
+                  terraform providers lock -platform=linux_amd64
+                  terraform init -backend=false
+
+            - name: Terraform Plan
+              working-directory: ${{ matrix.work_dir }}
+              run: |
+                  terraform plan \
+                      -var-file=config/terraform.tfvars \
+                      -lock=false
+
+
+    terratest:
+        name: Terratest
+        needs: [ci]
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: recipe-minimal
+                      work_dir: terraform/examples/recipe-minimal
+              # Add more recipes if any, here...
+
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Setup Go
+              uses: actions/setup-go@v3
+              with:
+                  go-version: 1.18
+
+            - name: Install
+              run: |
+                  go version
+                  go install
+
+            - name: Vet
+              run: |
+                  go vet .
+
+            - name: Fmt
+              run: |
+                  go fmt ./...
+
+            - name: Test
+              run: |
+                  go test -count=1 -v -cover -race -timeout 120s ./...
