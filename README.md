@@ -7,6 +7,7 @@
 ---
 
 [![Auto Release](https://github.com/Excoriate/vault-labs/actions/workflows/release.yml/badge.svg)](https://github.com/Excoriate/vault-labs/actions/workflows/release.yml)
+[![CI: Infrastructure Test](https://github.com/Excoriate/terraform-taggy/actions/workflows/ci.yml/badge.svg)](https://github.com/Excoriate/terraform-taggy/actions/workflows/ci.yml)
 
 ## ⚡️ Quick start
 

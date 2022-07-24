@@ -80,7 +80,7 @@ jobs:
             - name: Install
               run: |
                   go version
-                  go install
+                  go mod download
 
             - name: Vet
               run: |
