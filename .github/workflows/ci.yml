@@ -64,7 +64,7 @@ jobs:
 
         runs-on: ubuntu-latest
         defaults:
-            working_directory: ${{ matrix.work_dir }}
+            working-directory: ${{ matrix.work_dir }}
 
         steps:
             - name: Checkout Repository
