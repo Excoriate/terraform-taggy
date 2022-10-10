@@ -1,0 +1,27 @@
+version: '3'
+
+includes:
+  # Include here the reusable pieces of 'tasks', to avoid DRY.
+  common:
+    taskfile: '~/.taskfile/Taskfile.common.yml'
+    optional: false
+
+vars:
+  TF_TFVARS_FILE:
+  TF_BACKEND_CONFIG:
+  TF_WORKING_DIR:
+
+tasks:
+  init:
+    desc: "Run Terraform init"
+    cmds:
+      - cd {{.TF_WORKING_DIR}}
+      - task: "common:clean"
+      - terraform init -backend=false {{ .CLI_ARGS }}
+
+   init-stateful:
+    desc: "Run Terraform init"
+    cmds:
+      - cd {{.TF_WORKING_DIR}}
+      - task: "common:clean"
+      - terraform init -backend-config={{.TF_BACKEND_CONFIG}} {{ .CLI_ARGS }}

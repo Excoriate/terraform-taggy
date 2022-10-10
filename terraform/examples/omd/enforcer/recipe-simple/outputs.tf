@@ -1,7 +1,4 @@
-output "output_context" {
-  value = module.recipe_implementation.output_context
+output "output_recipe_simple" {
+  value = module.recipe_simple_pass
 }
 
-output "tags" {
-  value = module.recipe_implementation.tags
-}

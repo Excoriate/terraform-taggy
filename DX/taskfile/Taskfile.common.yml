@@ -1,0 +1,43 @@
+version: '3'
+
+env:
+#  SKIP_copy: true
+
+tasks:
+  clean:
+    desc: "Clean all the .terraform directories"
+    cmds:
+      - find . -type d -name ".terraform" -maxdepth 1 -exec rm -rf {} \;
+      - find . -type d -name ".terragrunt-cache" -maxdepth 1 -exec rm -rf {} \;
+      - find . -type f -name "terraform.tfstate" -maxdepth 1 -exec rm -rf {} \;
+      - find . -type f -name "terraform.tfstate.backup" -maxdepth 1 -exec rm -rf {} \;
+      - find . -type f -name "terraform.tfplan" -maxdepth 1 -exec rm -rf {} \;
+
+  prune:
+    desc: "Clean all the untracked files in the repository with some exclusions (!YOU LOOSE UNTRACKED FILE)"
+    cmds:
+      - task: clean
+      - git clean -f -xd --exclude=".idea" --exclude=".env" --exclude="*.tfvars" --exclude="backend.hcl" --exclude="backend.tf" --exclude="Taskfile.yml"
+
+    pre-commit:
+      cmds:
+        - pre-commit run --show-diff-on-failure --color always --all-files {{.CLI_ARGS}} # Pass arguments using -- <arg1> <arg2> ...
+
+    fmt:
+      cmds:
+        - terraform fmt -recursive -write=true -diff=true
+
+
+  default:
+    desc: "Default task / Help"
+    cmds:
+      - |
+        cat <<-EOT
+          # Running the tasks from your Taskfile.yml
+          #
+          # Task it's a modern replacement for Makefile to simplify the repetitive actions
+          # More information on taskfile and the capabilities here: https://taskfile.dev/
+          #
+          # Use task --list to see the available task, and --summary to see more info about a specific task
+        EOT
+    silent: true

@@ -12,17 +12,17 @@ resource "null_resource" "enforced_rules_basic" {
     }
 
     precondition {
-      condition = length([for k, v in var.tags : v if length(v) > 0 && v == trim(v)]) == length(values(var.tags))
-      error_message = "All the values of the var.tags map should be trimmed."
+      condition = length([for k, v in var.tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.tags))
+      error_message = "The var.tags values should be trimmed."
     }
 
+
     precondition {
-      condition = length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trim(v)]) == length(values(var.enforced_tags))
+      condition = length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags))
       error_message = "All the values of the var.enforced_tags should be included in the var.tags map."
     }
   }
 }
-
 
 
 resource "null_resource" "enforced_rules_format" {
@@ -30,63 +30,63 @@ resource "null_resource" "enforced_rules_format" {
 
   lifecycle {
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_lowercase_tag_keys == false || length(regexall("[a-z0-9_]+", keys(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_lowercase_tag_keys == false || length(regexall("[a-z0-9_]+", keys(var.tags)[0])) == 1
       error_message = "The tags map keys must be all lowercase."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_uppercase_tag_keys == false || length(regexall("[A-Z0-9_]+", keys(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_uppercase_tag_keys == false || length(regexall("[A-Z0-9_]+", keys(var.tags)[0])) == 1
       error_message = "The tags map keys must be all uppercase."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_lowercase_tag_values == false || length(regexall("[a-z0-9_]+", values(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_lowercase_tag_values == false || length(regexall("[a-z0-9_]+", values(var.tags)[0])) == 1
       error_message = "The tags map values must be all lowercase."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_uppercase_tag_values == false || length(regexall("[A-Z0-9_]+", values(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_uppercase_tag_values == false || length(regexall("[A-Z0-9_]+", values(var.tags)[0])) == 1
       error_message = "The tags map values must be all uppercase."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_camel_case_in_keys == false || length(regexall("[a-z0-9]+([A-Z0-9][a-z0-9]+)+", keys(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_camel_case_in_keys == false || length(regexall("[a-z0-9]+([A-Z0-9][a-z0-9]+)+", keys(var.tags)[0])) == 1
       error_message = "The tags map keys must be all camel case."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_camel_case_in_values == false || length(regexall("[a-z0-9]+([A-Z0-9][a-z0-9]+)+", values(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_camel_case_in_values == false || length(regexall("[a-z0-9]+([A-Z0-9][a-z0-9]+)+", values(var.tags)[0])) == 1
       error_message = "The tags map values must be all camel case."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_snake_case_in_keys == false || length(regexall("[a-z0-9]+(_[a-z0-9]+)+", keys(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_snake_case_in_keys == false || length(regexall("[a-z0-9]+(_[a-z0-9]+)+", keys(var.tags)[0])) == 1
       error_message = "The tags map keys must be all snake case."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_snake_case_in_values == false || length(regexall("[a-z0-9]+(_[a-z0-9]+)+", values(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_snake_case_in_values == false || length(regexall("[a-z0-9]+(_[a-z0-9]+)+", values(var.tags)[0])) == 1
       error_message = "The tags map values must be all snake case."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_kebab_case_in_keys == false || length(regexall("[a-z0-9]+(-[a-z0-9]+)+", keys(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_kebab_case_in_keys == false || length(regexall("[a-z0-9]+(-[a-z0-9]+)+", keys(var.tags)[0])) == 1
       error_message = "The tags map keys must be all kebab case."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_kebab_case_in_values == false || length(regexall("[a-z0-9]+(-[a-z0-9]+)+", values(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_kebab_case_in_values == false || length(regexall("[a-z0-9]+(-[a-z0-9]+)+", values(var.tags)[0])) == 1
       error_message = "The tags map values must be all kebab case."
     }
 
     precondition {
-      condition     = var.config_enforced_rules_format.enforce_no_escaped_characters == false || length(regexall("[^<>&%\\\\?/]+", keys(var.tags)[0])) == 1
+      condition     = var.enforced_rules_format.enforce_no_escaped_characters == false || length(regexall("[^<>&%\\\\?/]+", keys(var.tags)[0])) == 1
       error_message = "The tags map keys must not contain any of these characters: <, >, %, &, \\, ?, /."
     }
   }
 }
 
-resource "null_resources" "enforce_not_allowed_in_tags" {
+resource "null_resource" "enforce_not_allowed_in_tags" {
   for_each = local.is_enabled
 
   lifecycle {
@@ -101,8 +101,8 @@ resource "null_resources" "enforce_not_allowed_in_tags" {
     }
 
     precondition {
-      condition     = var.enforce_no_allowed_in_tags.enforce_no_special_characters_in_values == false || length(regexall("[^${join("", var.enforce_no_allowed_in_tags.enforce_no_special_characters_in_values_except)}]+", values(var.tags)[0])) == 1
-      error_message = "The tags map values must not contain special characters."
+      condition     = var.enforce_no_allowed_in_tags.enforce_no_special_characters_in_values == false || length(var.enforce_no_allowed_in_tags.enforce_no_special_characters_in_values_except) == 0 ? length(regexall("[^!@#\\$%^&*()_+{}|:\"<>?]+", values(var.tags)[0])) == 1 : length(regexall("[^${var.enforce_no_allowed_in_tags.enforce_no_special_characters_in_values_except}]+", values(var.tags)[0])) == 1
+      error_message = "The tags map values must not contain any special characters except the ones specified in the var.enforce_no_allowed_in_tags.enforce_no_special_characters_in_values_except variable."
     }
 
     precondition {

@@ -1,15 +1,17 @@
 ---
 version: '3'
 
-tasks:
-    pre-commit:
-        cmds:
-            - pre-commit run --show-diff-on-failure --color always --all-files {{.CLI_ARGS}} # Pass arguments using -- <arg1> <arg2> ...
+includes:
+  # Include here the reusable pieces of 'tasks', to avoid DRY.
+  common:
+    taskfile: './DX/taskfile/Taskfile.common.yml'
+    dir: ./DX/taskfile
 
+tasks:
     docs:
         cmds:
-            - ./scripts/generate-terraform-docs.sh
+            - ./DX/scripts/generate-terraform-docs.sh # TODO: make it generic, and able to receive an argument to set the working_dir by the caller script.
 
-    fmt:
+    default:
         cmds:
-            - terraform fmt -recursive -write=true -diff=true
+            - task: 'common:default'

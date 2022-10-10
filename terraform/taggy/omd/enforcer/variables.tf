@@ -16,7 +16,7 @@ by the upstream module that sets these tags.
   EOF
 }
 
-variable "config_enforced_rules_format" {
+variable "enforced_rules_format" {
   type = object({
     enforce_lowercase_tag_keys    = bool
     enforce_uppercase_tag_keys    = bool
@@ -46,13 +46,15 @@ variable "config_enforced_rules_format" {
   }
 
   validation {
-    condition     = var.config_enforced_rules_format.enforce_lowercase_tag_keys == true && var.config_enforced_rules_format.enforce_uppercase_tag_keys == true
-    error_message = "The enforce_lowercase_tag_keys and enforce_uppercase_tags_keys can't be both true."
+    condition     = var.enforced_rules_format.enforce_lowercase_tag_keys == false || var.enforced_rules_format.enforce_uppercase_tag_keys == false
+    error_message = "You can't enforce both lowercase and uppercase tag keys at the same time."
   }
+
   validation {
-    condition     = var.config_enforced_rules_format.enforce_lowercase_tag_values == true && var.config_enforced_rules_format.enforce_uppercase_tag_values == true
-    error_message = "The enforce_lowercase_tag_values and enforce_uppercase_tags_values can't be both true."
+    condition     = var.enforced_rules_format.enforce_lowercase_tag_values == false || var.enforced_rules_format.enforce_uppercase_tag_values == false
+    error_message = "You can't enforce both lowercase and uppercase tag values at the same time."
   }
+
 
   description = <<EOF
   A map of rules to enforce on all resources.  This is useful for tagging resources with a common set of rules.
