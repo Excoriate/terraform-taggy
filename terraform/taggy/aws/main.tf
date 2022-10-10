@@ -9,7 +9,7 @@ locals {
 }
 
 
-resource "null_resource" "run_tags_validations" {
+resource "null_resource" "run_validations_on_enforced_tags" {
   lifecycle {
     /*
      * These set of validations are always performed where the `config.fail_on_enforced_tags_default` is set to `true`.
@@ -48,6 +48,27 @@ length(trimspace(lookup(var.enforced_tags_default, "owner", ""))) > 0
     precondition {
       condition = var.config.fail_on_enforced_tags ? length([ for tag in var.config.enforced_tags_custom_keys: tag if lookup(var.enforced_tags_custom, trimspace(tag), null) != null]) == length(keys(var.enforced_tags_custom)) : true
       error_message = "Some enforced (custom) tags keys are missing in the `var.enforced_tags_custom` that were defined in the `var.config.enforced_tags_custom_keys` ${local.config_normalised.attached_doc_into_messages}."
+    }
+
+  }
+}
+
+resource "null_resource" "user_tags" {
+  lifecycle {
+    precondition {
+      condition = alltrue([
+      for keys, value in var.tags : substr(value, 0, 4) != "aws:"
+        ])
+      error_message = "Tags cannot contain 'aws:' in their prefix. This prefix is reserved for AWS internal use and can cause problems. Check: https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/allocation-tag-restrictions.html."
+    }
+
+    precondition {
+      validation {
+        condition = alltrue([
+        for key, value in var.tags : (length(trimspace(value)) > 0 && length(trimspace(value)) < 255)
+        ])
+        error_message = "Tags must be present and maximum size of 255 chars, in doubt please check: https://docs.aws.amazon.com/acm/latest/userguide/tags-restrictions.html \n Since AWS allows 255 chars versus Azure allowing 256 chars we are keeping the the lowest so we can be compatible with both."
+      }
     }
   }
 }
