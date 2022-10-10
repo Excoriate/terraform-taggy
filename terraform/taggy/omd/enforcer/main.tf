@@ -12,8 +12,8 @@ resource "null_resource" "enforced_rules_basic" {
     }
 
     precondition {
-      condition = length([for k, v in var.tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.tags))
-      error_message = "The var.tags values should be trimmed."
+      condition = length([for k, v in var.tags : v if length(v) > 0 && length(regexall("\\s", v)) > 0]) == 0
+      error_message = "The var.tags should not have whitespaces in its values, consider that this validation consider valid an empty string that is trimmed."
     }
 
     precondition {
