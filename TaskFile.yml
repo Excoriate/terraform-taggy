@@ -10,7 +10,7 @@ includes:
 tasks:
     docs:
         cmds:
-            - ./DX/scripts/generate-terraform-docs.sh # TODO: make it generic, and able to receive an argument to set the working_dir by the caller script.
+            - ./DX/scripts/generate-terraform-docs.sh --dir=terraform/taggy/omd
 
     default:
         cmds:

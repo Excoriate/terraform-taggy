@@ -2,7 +2,7 @@
 #
 # This script generates, recursively, terraform documentation using 'terraform-docs' binary. For
 # more information, see its official documentation: https://github.com/terraform-docs/terraform-docs
-# TODO: Pending to discuss, and decide what'll be the approach for 'code-smelling' Terraform code, with DX focus.
+# TODO: Currently it's looping into 1-level of directories, looking for tf modules. Customise this behaviour.
 
 set -euo pipefail
 
@@ -58,7 +58,7 @@ function check_or_install_terraform_docs(){
 #   None
 #######################################
 function generate_terraform_docs(){
-  pushd "$TERRAFORM_MODULES_DIR"
+  pushd "$WORKING_DIR"
   gum spin --spinner dot --title "Generating docs..." -- sleep 1
 
   for dir in */; do
@@ -77,11 +77,54 @@ function generate_terraform_docs(){
 }
 
 
+function set_working_dir() {
+  local working_dir
+  working_dir="$1"
+
+  if [ -z "$working_dir" ]; then
+    working_dir="$(pwd)"
+    gum style --foreground 212 "No working directory provided, using current directory: $working_dir"
+  fi
+
+  if [ ! -d "$working_dir" ]; then
+    echo "The directory $working_dir does not exist"
+    exit 1
+  fi
+
+  WORKING_DIR="$working_dir"
+}
+
+function parse_args() {
+  for arg in "$@"; do
+    echo "argument received --> [$arg]"
+    echo
+  done
+
+  for i in "$@"; do
+    case $i in
+    -d=* | --dir=*)
+      set_working_dir "${i#*=}"
+      shift
+      ;;
+    -h=* | --help=*)
+      help
+      shift
+      ;;
+
+    *) err "Unknown option: '-${i}'" "See '${0} --help' for usage" ;;
+    esac
+  done
+}
+
+
+
 function main() {
   gum style \
 	--foreground 212 --border-foreground 212 --border double \
 	--align center --width 50 --margin "1 2" --padding "2 4" \
 	'Terraform docs generation'
+
+	parse_args "$@"
 
   # Pre-checks
   check_or_install_gum
@@ -91,7 +134,8 @@ function main() {
   generate_terraform_docs
 }
 
+
 declare TERRAFORM_DOCS_CONFIG_FILE=".terraform-docs.yml"
-declare TERRAFORM_MODULES_DIR="terraform/taggy"
+declare WORKING_DIR
 
 main "$@"

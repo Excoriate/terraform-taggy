@@ -1,5 +1,4 @@
 ---
-# TODO: Discuss how to approach this configuration, hopefully file-based.
 formatter: markdown table
 
 output:
