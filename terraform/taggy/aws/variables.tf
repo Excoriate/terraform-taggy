@@ -15,3 +15,10 @@ Based on the official AWS documentation, there's a hard limit for ACM certificat
 more information, please refer to: https://docs.aws.amazon.com/acm/latest/userguide/tags-restrictions.html
 EOF
 }
+
+variable "is_enabled" {
+  type        = bool
+  description = <<EOF
+Whether to enable this module, its validations and eventual resources, or not.
+  EOF
+}
