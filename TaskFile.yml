@@ -3,10 +3,13 @@ version: '3'
 
 tasks:
     pre-commit:
-        deps: [terratest]
         cmds:
             - pre-commit run --show-diff-on-failure --color always --all-files {{.CLI_ARGS}} # Pass arguments using -- <arg1> <arg2> ...
 
     docs:
-      cmds:
-        - ./scripts/infrastructure/DX/generate-terraform-docs.sh
+        cmds:
+            - ./scripts/generate-terraform-docs.sh
+
+    fmt:
+        cmds:
+            - terraform fmt -recursive -write=true -diff=true

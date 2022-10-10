@@ -2,7 +2,7 @@
   <img alt="logo" src="https://forum.huawei.com/enterprise/en/data/attachment/forum/202204/21/120858nak5g1epkzwq5gcs.png" width="224px"/><br/>
   Terraform Taggy
 </h1>
-<p align="center">An easy way to address meaninful tags, <b>enforce conventions</b> validate metadata, <b>and identify IAC resources :)</b>.<br/><br/>
+<p align="center">An easy way to address meaninful tags, <b>enforce conventions,</b> validate operational metadata, <b>and identify IAC resources :)</b>.<br/><br/>
 
 ---
 

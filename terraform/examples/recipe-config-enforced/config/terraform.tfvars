@@ -1,3 +1,3 @@
 application = "myapp"
-name = "myproject"
-owner = "myuser"
+name        = "myproject"
+owner       = "myuser"

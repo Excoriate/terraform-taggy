@@ -92,6 +92,6 @@ function main() {
 }
 
 declare TERRAFORM_DOCS_CONFIG_FILE=".terraform-docs.yml"
-declare TERRAFORM_MODULES_DIR="terraform/modules"
+declare TERRAFORM_MODULES_DIR="terraform/taggy"
 
 main "$@"
