@@ -1,5 +1,5 @@
 locals {
-  result = true
+  result = join("", [for tag in null_resource.enforced_rules_basic: tag["id"] if tag["id"] != null]) != "" && join("", [for tag in null_resource.enforced_rules_format: tag["id"] if tag["id"] != null]) != "null" && join("", [for tag in null_resource.enforced_rules_custom: tag["id"] if tag["id"] != null]) && join("", [for tag in null_resource.enforce_not_allowed_in_tags: tag["id"] if tag["id"] != null]) != ""
 }
 
 resource "null_resource" "enforced_rules_basic" {
@@ -16,10 +16,9 @@ resource "null_resource" "enforced_rules_basic" {
       error_message = "The var.tags values should be trimmed."
     }
 
-
     precondition {
-      condition = length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags))
-      error_message = "All the values of the var.enforced_tags should be included in the var.tags map."
+      condition = length(var.enforced_tags) == 0 || length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags)) && length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v) && lookup(var.tags, k, "") != ""])
+      error_message = "The var.tags should have all the keys declared in the var.enforced_tags map, and the values should not be empty."
     }
   }
 }

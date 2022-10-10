@@ -14,13 +14,7 @@ module "recipe_simple_pass" {
   is_enabled = var.is_enabled
 
 
-  tags = merge(
-    var.tags,
-    {
-      "recipe"                    = "simple_pass"
-      "required_in_enforced_tags" = "i_should_exist"
-    }
-  )
+  tags = var.tags
 
   enforced_tags = {
     "required_in_enforced_tags" = "i_should_exist"
