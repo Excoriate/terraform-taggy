@@ -1,0 +1,98 @@
+---
+name: 'CI: Infrastructure Test'
+
+on: [push, pull_request]
+
+defaults:
+    run:
+        shell: bash
+
+jobs:
+    ci:
+        name: CI recipes TF
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: recipe-minimal
+                      work_dir: terraform/examples/recipe-minimal
+                    - name: recipe-config-enforced
+                      work_dir: terraform/examples/recipe-config-enforced
+
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ${{ matrix.work_dir }}
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v1
+              with:
+                  terraform_version: 1.2.5
+                  terraform_wrapper: false
+
+
+            - name: Terraform Init
+              run: |
+                  rm -f .terraform.lock.hcl
+                  terraform get
+
+                  terraform providers lock -platform=linux_amd64
+                  terraform init -backend=false
+
+            - name: Terraform Plan
+              run: |
+                  terraform plan \
+                      -var-file=config/terraform.tfvars \
+                      -lock=false
+
+
+    terratest:
+        name: Terratest
+        needs: [ci]
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: recipe-terratest
+                      work_dir: tests/terratest
+
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: ${{ matrix.work_dir }}
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Setup Go
+              uses: actions/setup-go@v3
+              with:
+                  go-version: 1.18
+
+            - name: Install
+              run: |
+                  go version
+                  go mod download
+
+            - name: Vet
+              run: |
+                  go vet .
+
+            - name: Fmt
+              run: |
+                  go fmt ./...
+
+            - name: Test recipe minimal
+              run: |
+                  go test -count=1 -v -cover -race -timeout 120s recipe_minimal_test.go
+
+            - name: Test config enforced
+              run: |
+                  go test -count=1 -v -cover -race -timeout 120s recipe_config_enforced_test.go

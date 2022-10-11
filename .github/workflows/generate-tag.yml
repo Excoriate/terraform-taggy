@@ -1,11 +1,15 @@
 ---
-name: Auto Tag
+name: Generate New Version
 
 on:
     push:
         branches:
             - main
             - master
+        paths-ignore:
+            - package.json
+            - TaskFile.yml
+            - CHANGELOG.md
 
 defaults:
     run:
@@ -13,7 +17,7 @@ defaults:
 
 jobs:
 
-    generate-tag:
+    generate-version:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout Repository
@@ -25,4 +29,3 @@ jobs:
               uses: anothrNick/github-tag-action@1.36.0
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  WITH_V: true

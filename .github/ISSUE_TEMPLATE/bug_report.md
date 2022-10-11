@@ -6,37 +6,28 @@ labels: "bug"
 assignees: "Excoriate"
 ---
 
-**Required check list:**
+Found a bug? Maybe just reach me out through [Email](alex@ideaup.cl) would be better.
 
-- [x] I'm gonna mark the checkboxes like this.
-- [ ] I'm not lazy, it's something that I can't solve
-- [ ] This is not about third-party project, framework, package or technology.
+## Describe the Bug
+A clear and concise description of what the bug is.
 
-**My environment:**
+## Expected Behavior
+A clear and concise description of what you expected to happen.
 
-- OS (`uname -a`):
-- Golang (`go version`):
-- Vault CLI (`cgapp -v`):
-
-**Describe the bug:**
-
-<!-- A clear and concise description of what the bug is. -->
-
-**Steps to reproduce the behavior:**
-
-1. Go to ...
-2. Click on ...
-3. ...
+## Steps to Reproduce
+Steps to reproduce the behavior:
+1. Go to '...'
+2. Run '....'
+3. Enter '....'
 4. See error
 
-**Expected behavior:**
+## Screenshots
+If applicable, add screenshots or logs to help explain your problem.
 
-<!-- A clear and concise description of what you expected to happen. -->
+## Environment (please complete the following information):
+Anything that will help us triage the bug will help. Here are some ideas:
+- OS: [e.g. Linux, OSX, WSL, etc]
+- Version [e.g. 0.0.2]
 
-**Screenshots:**
-
-<!-- If applicable, add screenshots to help explain your problem. -->
-
-**Additional context:**
-
-<!-- Add any other context about the problem here. -->
+## Additional Context
+Add any other context about the problem here.

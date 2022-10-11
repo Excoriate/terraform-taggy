@@ -5,29 +5,22 @@ title: ""
 labels: "feature"
 assignees: "Excoriate"
 ---
+Have a better idea? Maybe just reach me out through [Email](alex@ideaup.cl) would be better.
 
-**Required check list:**
+## Describe the Feature
+A clear and concise description of what the bug is.
 
-- [x] I'm gonna mark the checkboxes like this.
-- [ ] I understand, that this proejct is Open Source and not-for-profit product.
-- [ ] This is not about third-party project, framework, package or technology.
+## Expected Behavior
+A clear and concise description of what you expected to happen.
 
-**Is your feature request related to a problem? Please describe.**
+## Use Case
+Is your feature request related to a problem/challenge you are trying to solve? Please provide some additional context of why this feature or capability will be valuable.
 
-<!-- A clear and concise description of what the problem is. Ex. I'm always frustrated when [...] -->
+## Describe Ideal Solution
+A clear and concise description of what you want to happen. If you don't know, that's okay.
 
-**Describe the solution you'd like:**
+## Alternatives Considered
+Explain what alternative solutions or features you've considered.
 
-<!-- A clear and concise description of what you want to happen. -->
-
-**Describe alternatives you've considered:**
-
-<!-- A clear and concise description of any alternative solutions or features you've considered. -->
-
-**Screenshots:**
-
-<!-- If applicable, add screenshots to help explain your feature or problem. -->
-
-**Additional context:**
-
-<!-- Add any other context or screenshots about the feature request here. -->
+## Additional Context
+Add any other context or screenshots about the feature request here.

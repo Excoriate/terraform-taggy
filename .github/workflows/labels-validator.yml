@@ -2,8 +2,10 @@
 name: Validate GH Labels
 
 on:
-    pull_request:
-        types: [opened, labeled, unlabeled, synchronize]
+    workflow_run:
+        workflows: [Assign labels on PR]
+        types:
+            - completed
 
 defaults:
     run:
@@ -21,4 +23,4 @@ jobs:
               uses: NathanielHill/check-pr-label-action@v4.0.0
               with:
                   github-token: ${{ secrets.GITHUB_TOKEN }}
-                  valid-labels: bug, enhancement, feature, documentation, refactor, test, proposal, chore
+                  valid-labels: bug, major, premajor, minor, preminor, patch, prepatch, prerelease, XS, S, M, L, Too Large

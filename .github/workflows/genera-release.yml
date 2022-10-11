@@ -1,17 +1,18 @@
 ---
-name: Auto Release
+name: Auto Release Stable
 
 on:
     workflow_run:
-        workflows: [Auto Tag]
+        workflows: [Generate New Version]
         types:
             - completed
         branches:
             - main
             - master
         paths-ignore:
+            - package.json
+            - TaskFile.yml
             - CHANGELOG.md
-            - README.md
 
 defaults:
     run:

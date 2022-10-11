@@ -36,3 +36,7 @@ tasks:
             - task: 'aws:recipe-pass'
             - task: 'aws:recipe-fail-invalid-aws-prefix'
             - task: 'aws:recipe-fail-max-key-length-reached'
+
+    pre-commit:
+      cmds:
+        - task: 'common:pre-commit'
