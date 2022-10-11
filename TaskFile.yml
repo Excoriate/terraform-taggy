@@ -6,9 +6,13 @@ includes:
   common:
     taskfile: './DX/taskfile/Taskfile.common.yml'
 
-  omd:
-    taskfile: './terraform/examples/Taskfile.yml'
+  enforcer:
+    taskfile: './terraform/examples/Taskfile.enforcer.yml'
     dir: ./terraform/examples/omd
+
+  aws:
+    taskfile: './terraform/examples/Taskfile.aws.yml'
+    dir: ./terraform/examples/aws
 
 tasks:
     docs:
@@ -19,9 +23,15 @@ tasks:
         cmds:
             - task: 'common:default'
 
-    omd-enforcer-recipes-basics:
+    enforcer-recipes-basics:
         cmds:
-            - task: 'omd:recipe-pass'
-            - task: 'omd:recipe-fail-enforced-tag-failed'
-            - task: 'omd:recipe-fail-tag-key-with-empty-values'
-            - task: 'omd:recipe-fail-tag-value-non-trimmed'
+            - task: 'enforcer:recipe-pass'
+            - task: 'enforcer:recipe-fail-enforced-tag-failed'
+            - task: 'enforcer:recipe-fail-tag-key-with-empty-values'
+            - task: 'enforcer:recipe-fail-tag-value-non-trimmed'
+
+    aws-recipes-basics:
+        cmds:
+            - task: 'aws:recipe-pass'
+            - task: 'aws:recipe-fail-invalid-aws-prefix'
+            - task: 'aws:recipe-fail-max-key-length-reached'

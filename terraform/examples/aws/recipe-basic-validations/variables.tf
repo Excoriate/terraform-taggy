@@ -8,11 +8,3 @@ variable "tags" {
   description = "A map of tags to add to all resources"
 }
 
-
-module "recipe_simple" {
-  source     = "../../../taggy/modules/cloud/aws"
-  is_enabled = var.is_enabled
-
-  tags = var.tags
-}
-

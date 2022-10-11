@@ -1,4 +1,4 @@
-module "recipe_simple" {
+module "recipe_basic_validations" {
   source     = "../../../../taggy/modules/omd/enforcer"
   is_enabled = var.is_enabled
 

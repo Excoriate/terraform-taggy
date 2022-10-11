@@ -1,0 +1,49 @@
+---
+version: '3'
+
+vars:
+  TF_MODULE_DIR: "recipe-basic-validations"
+
+includes:
+    tf:
+        taskfile: './../../DX/taskfile/Taskfile.terraform.yml'
+        dir: 'recipe-basic-validations'
+
+    common:
+        taskfile: './../../DX/taskfile/Taskfile.common.yml'
+        dir: 'recipe-basic-validations'
+
+tasks:
+    clean:
+        cmds:
+            - task: 'common:clean'
+
+    recipe-pass:
+        dir: '{{ .TF_MODULE_DIR }}'
+        deps: [ 'clean' ]
+        cmds:
+          # Run example recipe: 'All checks passed'
+          - task: 'tf:init'
+          - task: 'tf:plan-vars'
+            vars:
+                TF_VARS_FILE: config/fixtures_default_rules_pass.tfvars
+
+    recipe-fail-invalid-aws-prefix:
+      dir: '{{ .TF_MODULE_DIR }}'
+      deps: [ 'clean' ]
+      cmds:
+        # Run example recipe: 'Invalid AWS prefix'
+        - task: 'tf:init'
+        - task: 'tf:plan-vars-no-error'
+          vars:
+            TF_VARS_FILE: config/fixtures_default_rules_failed_invalid_aws_prefix.tfvars
+
+    recipe-fail-max-key-length-reached:
+      dir: '{{ .TF_MODULE_DIR }}'
+      deps: [ 'clean' ]
+      cmds:
+        # Run example recipe: 'Max key length reached'
+        - task: 'tf:init'
+        - task: 'tf:plan-vars-no-error'
+          vars:
+            TF_VARS_FILE: config/fixtures_default_rules_failed_max_tag_key_length.tfvars
