@@ -41,8 +41,6 @@ jobs:
 
         runs-on: ubuntu-latest
 
-        # Since there are expected 'failures' in the test suite
-        continue-on-error: true
         defaults:
             run:
                 working-directory: '${{ env.WORKING_DIR_AWS }}'
@@ -68,9 +66,13 @@ jobs:
                   terraform plan \
                       -var-file=${{ matrix.config }} \
                       -lock=false
+              # Since there are expected 'failures' in the test suite
+              continue-on-error: true
 
             - name: Terraform Apply
               run: |
                   terraform apply \
                       -var-file=${{ matrix.config }} \
                       -lock=false -auto-approve
+              # Since there are expected 'failures' in the test suite
+              continue-on-error: true
