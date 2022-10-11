@@ -19,6 +19,6 @@ tasks:
         cmds:
             - task: 'common:default'
 
-    plan-enforcer:
+    enforcer-basic:
         cmds:
             - task: 'omd:init'

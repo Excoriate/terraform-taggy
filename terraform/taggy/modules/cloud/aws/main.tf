@@ -1,4 +1,6 @@
-resource "null_resource" "enforce_basic_aws" {
+resource "random_uuid" "enforce_basic_aws" {
+  count = local.is_enabled
+
   lifecycle {
     precondition {
       condition = alltrue([

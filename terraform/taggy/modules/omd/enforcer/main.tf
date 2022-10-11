@@ -1,11 +1,16 @@
 locals {
   // Set of rules to enforce
-  validation_basics        = join("", [for tag in null_resource.enforced_rules_basic.*.id : tag["id"] if tag["id"] != null])
-  validation_tags_enforced = join("", [for tag in null_resource.enforced_tags.*.id : tag["id"] if tag["id"] != null])
+  validation_basics      = join("", [for tag in random_uuid.enforced_rules_basic : tag.result if tag != null])
+  validation_enforced    = join("", [for tag in random_uuid.enforced_tags : tag.result if tag != null])
+  validation_format      = join("", [for tag in random_uuid.enforced_rules_format : tag.result if tag != null])
+  validation_not_allowed = join("", [for tag in random_uuid.enforce_not_allowed_in_tags : tag.result if tag.result != null])
+  validation_custom      = join("", [for tag in random_uuid.enforced_rules_custom : tag.result if tag != null])
+
+  validation_result = alltrue([length(local.validation_basics) > 0, length(local.validation_enforced) > 0, length(local.validation_format) > 0, length(local.validation_not_allowed) > 0, length(local.validation_custom) > 0])
 }
 
-resource "null_resource" "enforced_rules_basic" {
-  for_each = local.is_enabled
+resource "random_uuid" "enforced_rules_basic" {
+  count = local.is_enabled
 
   lifecycle {
     precondition {
@@ -20,16 +25,19 @@ resource "null_resource" "enforced_rules_basic" {
   }
 }
 
-resource "null_resource" "enforced_tags" {
-  precondition {
-    condition     = length(var.enforced_tags) == 0 || length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags)) && length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v) && lookup(var.tags, k, "") != ""])
-    error_message = "The var.tags should have all the keys declared in the var.enforced_tags map, and the values should not be empty; \n currently, some tags are missing, therefore this error."
+resource "random_uuid" "enforced_tags" {
+  count = local.is_enabled
+
+  lifecycle {
+    precondition {
+      condition     = length(var.enforced_tags) == 0 || length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags)) && length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v) && lookup(var.tags, k, "") != ""])
+      error_message = "The var.tags should have all the keys declared in the var.enforced_tags map, and the values should not be empty; \n currently, some tags are missing, therefore this error."
+    }
   }
 }
 
-
-resource "null_resource" "enforced_rules_format" {
-  for_each = local.is_enabled
+resource "random_uuid" "enforced_rules_format" {
+  count = local.is_enabled
 
   lifecycle {
     precondition {
@@ -89,8 +97,8 @@ resource "null_resource" "enforced_rules_format" {
   }
 }
 
-resource "null_resource" "enforce_not_allowed_in_tags" {
-  for_each = local.is_enabled
+resource "random_uuid" "enforce_not_allowed_in_tags" {
+  count = local.is_enabled
 
   lifecycle {
     precondition {
@@ -120,8 +128,8 @@ resource "null_resource" "enforce_not_allowed_in_tags" {
   }
 }
 
-resource "null_resource" "enforced_rules_custom" {
-  for_each = local.is_enabled
+resource "random_uuid" "enforced_rules_custom" {
+  count = local.is_enabled
 
   lifecycle {
     precondition {

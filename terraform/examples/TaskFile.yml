@@ -4,17 +4,19 @@ version: '3'
 vars:
     RECIPE_MODULE_OMD_ENFORCER: "enforcer"
     RECIPE_MODULE_AWS: "aws"
+    EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR: "enforcer/recipe-simple"
 
 includes:
     tf:
         taskfile: './../../DX/taskfile/Taskfile.terraform.yml'
+        dir: 'enforcer/recipe-simple'
 
 tasks:
     init:
-        dir: enforcer/recipe-rules-basic
+        dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
         cmds:
           - task: 'tf:init'
           - task: 'tf:plan-vars'
             vars:
-                TF_VARS_FILE: config/fixtures_simple.tfvars
+                TF_VARS_FILE: config/fixtures_basic_rules.tfvars
 

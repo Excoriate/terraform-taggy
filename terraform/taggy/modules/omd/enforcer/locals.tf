@@ -1,4 +1,4 @@
 locals {
   // Control flags
-  is_enabled = toset(var.is_enabled ? ["true"] : [])
+  is_enabled = var.is_enabled ? 1 : 0
 }

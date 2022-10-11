@@ -12,8 +12,8 @@ output "summary" {
 
 
 // TODO: Figure out a way to output the overall state of these validations, considering that a failure exists with 1.
-output "enforcer_result" {
-  value       = local.result ? "PASS" : "FAIL"
+output "result" {
+  value       = local.validation_result ? "PASS" : "FAIL"
   description = <<EOF
 The result of the tag enforcer, their rules, and validations. Possible values and their meaning are:
   - "PASS" - All resources have the required tags, and have passedd all validations.
