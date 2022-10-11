@@ -27,13 +27,12 @@ resource "random_uuid" "enforce_length_validation" {
       for key, value in var.tags : length(trimspace(value)) > 0 && length(trimspace(value)) <= local.aws_limits.max_tag_value_length])
       error_message = "Tags must be less than ${local.aws_limits.max_tag_value_length} characters, in case of doubts, please \n refer to the official aws documentation: https://docs.aws.amazon.com/acm/latest/userguide/tags-restrictions.html."
 
-
-      precondition {
-        condition = alltrue([
-          for key, value in var.tags : length(trimspace(key)) > 0 && length(trimspace(key)) <= local.aws_limits.max_tag_key_length
-        ])
-        error_message = "Tags must be less than ${local.aws_limits.max_tag_key_length} characters, in case of doubts, please \n refer to the official aws documentation: https://docs.aws.amazon.com/acm/latest/userguide/tags-restrictions.html."
-      }
+    }
+    precondition {
+      condition = alltrue([
+        for key, value in var.tags : length(trimspace(key)) > 0 && length(trimspace(key)) <= local.aws_limits.max_tag_key_length
+      ])
+      error_message = "Tags must be less than ${local.aws_limits.max_tag_key_length} characters, in case of doubts, please \n refer to the official aws documentation: https://docs.aws.amazon.com/acm/latest/userguide/tags-restrictions.html."
     }
   }
 }
