@@ -1,5 +1,7 @@
 locals {
-  result = join("", [for tag in null_resource.enforced_rules_basic: tag["id"] if tag["id"] != null]) != "" && join("", [for tag in null_resource.enforced_rules_format: tag["id"] if tag["id"] != null]) != "null" && join("", [for tag in null_resource.enforced_rules_custom: tag["id"] if tag["id"] != null]) && join("", [for tag in null_resource.enforce_not_allowed_in_tags: tag["id"] if tag["id"] != null]) != ""
+  // Set of rules to enforce
+  validation_basics        = join("", [for tag in null_resource.enforced_rules_basic.*.id : tag["id"] if tag["id"] != null])
+  validation_tags_enforced = join("", [for tag in null_resource.enforced_tags.*.id : tag["id"] if tag["id"] != null])
 }
 
 resource "null_resource" "enforced_rules_basic" {
@@ -7,19 +9,21 @@ resource "null_resource" "enforced_rules_basic" {
 
   lifecycle {
     precondition {
-      condition = length(var.tags) > 0 && length(keys(var.tags)) > 0 && length(values(var.tags)) > 0 && length([for k, v in var.tags : v if length(v) > 0]) == length(values(var.tags))
+      condition     = var.enforce_rules_basics.enforce_all_keys_and_values_are_filled == false || length(var.tags) > 0 && length(keys(var.tags)) > 0 && length(values(var.tags)) > 0 && length([for k, v in var.tags : v if length(v) > 0]) == length(values(var.tags))
       error_message = "The var.tags should have keys, values and all its values should be non-empty."
     }
 
     precondition {
-      condition = length([for k, v in var.tags : v if length(v) > 0 && length(regexall("\\s", v)) > 0]) == 0
+      condition     = var.enforce_rules_basics.enforce_no_whitespaces_in_tag_values == false || length([for k, v in var.tags : v if length(v) > 0 && length(regexall("\\s", v)) > 0]) == 0
       error_message = "The var.tags should not have whitespaces in its values, consider that this validation consider valid an empty string that is trimmed."
     }
+  }
+}
 
-    precondition {
-      condition = length(var.enforced_tags) == 0 || length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags)) && length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v) && lookup(var.tags, k, "") != ""])
-      error_message = "The var.tags should have all the keys declared in the var.enforced_tags map, and the values should not be empty."
-    }
+resource "null_resource" "enforced_tags" {
+  precondition {
+    condition     = length(var.enforced_tags) == 0 || length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length(values(var.enforced_tags)) && length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v)]) == length([for k, v in var.enforced_tags : v if length(v) > 0 && v == trimspace(v) && lookup(var.tags, k, "") != ""])
+    error_message = "The var.tags should have all the keys declared in the var.enforced_tags map, and the values should not be empty; \n currently, some tags are missing, therefore this error."
   }
 }
 

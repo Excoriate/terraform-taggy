@@ -5,7 +5,10 @@ includes:
   # Include here the reusable pieces of 'tasks', to avoid DRY.
   common:
     taskfile: './DX/taskfile/Taskfile.common.yml'
-    dir: ./DX/taskfile
+
+  omd:
+    taskfile: './terraform/examples/Taskfile.yml'
+    dir: ./terraform/examples/omd
 
 tasks:
     docs:
@@ -15,3 +18,7 @@ tasks:
     default:
         cmds:
             - task: 'common:default'
+
+    plan-enforcer:
+        cmds:
+            - task: 'omd:init'

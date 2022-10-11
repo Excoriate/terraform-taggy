@@ -10,7 +10,7 @@ variable "tags" {
 
 
 module "recipe_simple_pass" {
-  source     = "../../../../taggy/omd/enforcer"
+  source     = "../../../../taggy/modules/omd/enforcer"
   is_enabled = var.is_enabled
 
 

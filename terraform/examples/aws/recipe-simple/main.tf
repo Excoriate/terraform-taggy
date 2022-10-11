@@ -10,7 +10,7 @@ variable "tags" {
 
 
 module "recipe_simple" {
-  source     = "../../../taggy/aws"
+  source     = "../../../taggy/modules/cloud/aws"
   is_enabled = var.is_enabled
 
   tags = var.tags

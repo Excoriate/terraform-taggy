@@ -1,5 +1,5 @@
 variable "tags" {
-  type = map(string)
+  type        = map(string)
   description = <<EOF
 Set of tags passed by the caller module. This set of tags will be validated against the set of rules described by
 this module.
@@ -13,6 +13,21 @@ variable "enforced_tags" {
   A map of tags to enforce on all resources.  This is useful for tagging resources with a common set of tags.
 If this set of tags aren't set, this module will trigger an error, in order to be managed
 by the upstream module that sets these tags.
+  EOF
+}
+
+variable "enforce_rules_basics" {
+  type = object({
+    enforce_all_keys_and_values_are_filled = bool
+    enforce_no_whitespaces_in_tag_values   = bool
+  })
+  default = {
+    enforce_all_keys_and_values_are_filled = false
+    enforce_no_whitespaces_in_tag_values   = false
+  }
+  description = <<EOF
+  A set of rules to enforce on all tags.  This is useful for enforcing a common set of rules on all tags.
+with likely validations commonly used for cloud resource tagging, and finOps.
   EOF
 }
 

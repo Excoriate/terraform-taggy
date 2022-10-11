@@ -1,11 +1,11 @@
 output "summary" {
-  value       = {
-    tags = var.tags
-    tags_enforced = var.enforced_tags
+  value = {
+    tags                    = var.tags
+    tags_enforced           = var.enforced_tags
     number_of_tags_enforced = length(var.enforced_tags)
-    number_of_tags = length(var.tags)
+    number_of_tags          = length(var.tags)
   }
-  description =<<EOF
+  description = <<EOF
   This output is used to show the tags and enforced tags
   EOF
 }

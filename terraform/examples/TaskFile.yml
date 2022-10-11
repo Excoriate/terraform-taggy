@@ -2,58 +2,19 @@
 version: '3'
 
 vars:
-    RECIPE_SIMPLE_PREFIX: "recipe-simple"
-    RECIPE_MODULE_OMD: "omd"
+    RECIPE_MODULE_OMD_ENFORCER: "enforcer"
     RECIPE_MODULE_AWS: "aws"
 
+includes:
+    tf:
+        taskfile: './../../DX/taskfile/Taskfile.terraform.yml'
+
 tasks:
-    clean-enforcer:
-        dir: "{{.RECIPE_MODULE_OMD}}"/enforcer
-        cmds:
-            - rm -rf .terraform
-            - rm terraform.tfstate || true
-            - rm terraform.tfstate.backup || true
-            - rm .terraform.lock.hcl || true
-            - rm -rf .terragrunt-cache || true
-            - rm terraform.tfplan || true
-
-    clean-aws:
-        dir: "{{.RECIPE_MODULE_AWS}}"
-        cmds:
-            - rm -rf .terraform
-            - rm terraform.tfstate || true
-            - rm terraform.tfstate.backup || true
-            - rm .terraform.lock.hcl || true
-            - rm -rf .terragrunt-cache || true
-            - rm terraform.tfplan || true
-
-    clean:
-        cmds:
-            - task clean-enforcer
-            - task clean-aws
-
     init:
-        deps: [clean]
+        dir: enforcer/recipe-rules-basic
         cmds:
-            - terraform init -backend=false {{ .CLI_ARGS }}
+          - task: 'tf:init'
+          - task: 'tf:plan-vars'
+            vars:
+                TF_VARS_FILE: config/fixtures_simple.tfvars
 
-    plan:
-        deps: [init]
-        cmds:
-            - |
-              terraform plan -var="tags={\"Environment\":\"{{.ENVIRONMENT}}\"}" \
-                -var="aws_region={{.AWS_REGION}}" \
-                -var="environment={{.ENVIRONMENT}}" \
-                -out=terraform.tfplan \
-                {{ .CLI_ARGS }}
-
-    apply:
-        deps: [init]
-        cmds:
-            - terraform init -backend=false {{ .CLI_ARGS }}
-            - |
-              terraform apply -var="tags={\"Environment\":\"{{.ENVIRONMENT}}\"}" \
-                -var="aws_region={{.AWS_REGION}}" \
-                -var="environment={{.ENVIRONMENT}}" \
-                -auto-approve \
-                {{ .CLI_ARGS }}
