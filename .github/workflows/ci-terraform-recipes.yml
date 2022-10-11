@@ -42,7 +42,7 @@ jobs:
         runs-on: ubuntu-latest
         defaults:
             run:
-                working-directory: $WORKING_DIR_AWS
+                working-directory: '${WORKING_DIR_AWS}'
 
         steps:
             - name: Checkout Repository
