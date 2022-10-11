@@ -15,4 +15,3 @@ module "recipe_basic_validations" {
     enforce_no_whitespaces_in_tag_values   = var.enforce_no_whitespaces_in_tag_values
   }
 }
-

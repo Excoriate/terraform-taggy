@@ -1,109 +1,110 @@
+---
 version: '3'
 
 vars:
-  TF_VARS_FILE:
-  TF_BACKEND_CONFIG:
-  TF_WORKING_DIR:
+    TF_VARS_FILE:
+    TF_BACKEND_CONFIG:
+    TF_WORKING_DIR:
 #  TF_IGNORE_ERRORS: '{{default "false" .TF_IGNORE_ERRORS}}'
 
 tasks:
-  init:
-    desc: "Run Terraform init"
-    cmds:
-      - cmd: terraform init -backend=false {{ .CLI_ARGS }}
+    init:
+        desc: Run Terraform init
+        cmds:
+            - cmd: terraform init -backend=false {{ .CLI_ARGS }}
 
-  init-stateful:
-    desc: "Run Terraform init"
-    cmds:
-      - cmd: terraform init -backend-config={{.TF_BACKEND_CONFIG}} {{ .CLI_ARGS }}
+    init-stateful:
+        desc: Run Terraform init
+        cmds:
+            - cmd: terraform init -backend-config={{.TF_BACKEND_CONFIG}} {{ .CLI_ARGS }}
 
-  plan:
-    desc: "Run Terraform plan"
-    cmds:
-      - cmd: terraform plan {{ .CLI_ARGS }}
+    plan:
+        desc: Run Terraform plan
+        cmds:
+            - cmd: terraform plan {{ .CLI_ARGS }}
 
-  plan-no-error:
-    desc: "Run Terraform plan ignoring errors"
-    cmds:
-      - cmd: terraform plan {{ .CLI_ARGS }}
-        ignore_error: true
+    plan-no-error:
+        desc: Run Terraform plan ignoring errors
+        cmds:
+            - cmd: terraform plan {{ .CLI_ARGS }}
+              ignore_error: true
 
-  plan-vars:
-    desc: "Run Terraform plan with a *.tfvars file"
-    cmds:
-      - cmd: terraform plan -var-file={{.TF_VARS_FILE}} {{ .CLI_ARGS }}
+    plan-vars:
+        desc: Run Terraform plan with a *.tfvars file
+        cmds:
+            - cmd: terraform plan -var-file={{.TF_VARS_FILE}} {{ .CLI_ARGS }}
 
-  plan-vars-no-error:
-    desc: "Run Terraform plan with a *.tfvars file, ignoring errors"
-    cmds:
-      - cmd: terraform plan -var-file={{.TF_VARS_FILE}} {{ .CLI_ARGS }}
-        ignore_error: true
+    plan-vars-no-error:
+        desc: Run Terraform plan with a *.tfvars file, ignoring errors
+        cmds:
+            - cmd: terraform plan -var-file={{.TF_VARS_FILE}} {{ .CLI_ARGS }}
+              ignore_error: true
 
-  apply:
-    desc: "Run Terraform apply"
-    cmds:
-      - cmd: terraform apply -auto-approve {{ .CLI_ARGS }}
+    apply:
+        desc: Run Terraform apply
+        cmds:
+            - cmd: terraform apply -auto-approve {{ .CLI_ARGS }}
 
-  apply-no-error:
-    desc: "Run Terraform apply ignoring errors"
-    cmds:
-      - cmd: terraform apply -auto-approve {{ .CLI_ARGS }}
-        ignore_error: true
+    apply-no-error:
+        desc: Run Terraform apply ignoring errors
+        cmds:
+            - cmd: terraform apply -auto-approve {{ .CLI_ARGS }}
+              ignore_error: true
 
-  apply-vars:
-    desc: "Run Terraform apply with a *.tfvars file"
-    cmds:
-      - cmd: |
-          terraform apply \
-          -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
+    apply-vars:
+        desc: Run Terraform apply with a *.tfvars file
+        cmds:
+            - cmd: |
+                  terraform apply \
+                  -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
 
-  apply-vars-no-error:
-    desc: "Run Terraform apply with a *.tfvars file, ignoring errors"
-    cmds:
-      - cmd: |
-          terraform apply \
-          -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
-        ignore_error: true
+    apply-vars-no-error:
+        desc: Run Terraform apply with a *.tfvars file, ignoring errors
+        cmds:
+            - cmd: |
+                  terraform apply \
+                  -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
+              ignore_error: true
 
-  destroy:
-    desc: "Run Terraform destroy"
-    cmds:
-      - cmd: terraform destroy -auto-approve {{ .CLI_ARGS }}
+    destroy:
+        desc: Run Terraform destroy
+        cmds:
+            - cmd: terraform destroy -auto-approve {{ .CLI_ARGS }}
 
-  destroy-no-error:
-    desc: "Run Terraform destroy ignoring errors"
-    cmds:
-      - cmd: terraform destroy -auto-approve {{ .CLI_ARGS }}
-        ignore_error: true
+    destroy-no-error:
+        desc: Run Terraform destroy ignoring errors
+        cmds:
+            - cmd: terraform destroy -auto-approve {{ .CLI_ARGS }}
+              ignore_error: true
 
-  destroy-vars:
-    desc: "Run Terraform destroy with a *.tfvars file"
-    cmds:
-      - cmd: |
-          terraform destroy \
-          -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
+    destroy-vars:
+        desc: Run Terraform destroy with a *.tfvars file
+        cmds:
+            - cmd: |
+                  terraform destroy \
+                  -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
 
-  destroy-vars-no-error:
-    desc: "Run Terraform destroy with a *.tfvars file, ignoring errors"
-    cmds:
-      - cmd: |
-          terraform destroy \
-          -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
-        ignore_error: true
+    destroy-vars-no-error:
+        desc: Run Terraform destroy with a *.tfvars file, ignoring errors
+        cmds:
+            - cmd: |
+                  terraform destroy \
+                  -var-file={{.TF_VARS_FILE}} -auto-approve {{ .CLI_ARGS }}
+              ignore_error: true
 
-  fmt:
-    desc: "Run Terraform fmt check"
-    cmds:
-      - cmd: terraform fmt -recursive -write=false {{ .CLI_ARGS }}
+    fmt:
+        desc: Run Terraform fmt check
+        cmds:
+            - cmd: terraform fmt -recursive -write=false {{ .CLI_ARGS }}
 
-  fmt-fix:
-    desc: "Run Terraform fmt fixing the unformatted files"
-    cmds:
-      - cmd: terraform fmt -recursive -write=true {{ .CLI_ARGS }}
+    fmt-fix:
+        desc: Run Terraform fmt fixing the unformatted files
+        cmds:
+            - cmd: terraform fmt -recursive -write=true {{ .CLI_ARGS }}
 #        ignore_error: {{ .TF_IGNORE_ERRORS }}
 
-  lint:
-    desc: "Run Terraform lint"
-    cmds:
-      - tflint --init
-      - tflint --error-with-issues {{ .CLI_ARGS }}
+    lint:
+        desc: Run Terraform lint
+        cmds:
+            - tflint --init
+            - tflint --error-with-issues {{ .CLI_ARGS }}

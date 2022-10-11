@@ -2,17 +2,16 @@
 version: '3'
 
 includes:
-  # Include here the reusable pieces of 'tasks', to avoid DRY.
-  common:
-    taskfile: './DX/taskfile/Taskfile.common.yml'
+    common:
+        taskfile: ./DX/taskfile/Taskfile.common.yml
 
-  enforcer:
-    taskfile: './terraform/examples/Taskfile.enforcer.yml'
-    dir: ./terraform/examples/omd
+    enforcer:
+        taskfile: ./terraform/examples/Taskfile.enforcer.yml
+        dir: ./terraform/examples/omd
 
-  aws:
-    taskfile: './terraform/examples/Taskfile.aws.yml'
-    dir: ./terraform/examples/aws
+    aws:
+        taskfile: ./terraform/examples/Taskfile.aws.yml
+        dir: ./terraform/examples/aws
 
 tasks:
     docs:
@@ -22,21 +21,21 @@ tasks:
 
     default:
         cmds:
-            - task: 'common:default'
+            - task: common:default
 
     enforcer-recipes-basics:
         cmds:
-            - task: 'enforcer:recipe-pass'
-            - task: 'enforcer:recipe-fail-enforced-tag-failed'
-            - task: 'enforcer:recipe-fail-tag-key-with-empty-values'
-            - task: 'enforcer:recipe-fail-tag-value-non-trimmed'
+            - task: enforcer:recipe-pass
+            - task: enforcer:recipe-fail-enforced-tag-failed
+            - task: enforcer:recipe-fail-tag-key-with-empty-values
+            - task: enforcer:recipe-fail-tag-value-non-trimmed
 
     aws-recipes-basics:
         cmds:
-            - task: 'aws:recipe-pass'
-            - task: 'aws:recipe-fail-invalid-aws-prefix'
-            - task: 'aws:recipe-fail-max-key-length-reached'
+            - task: aws:recipe-pass
+            - task: aws:recipe-fail-invalid-aws-prefix
+            - task: aws:recipe-fail-max-key-length-reached
 
     pre-commit:
-      cmds:
-        - task: 'common:pre-commit'
+        cmds:
+            - task: common:hooks

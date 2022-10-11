@@ -2,60 +2,58 @@
 version: '3'
 
 vars:
-  TF_MODULE_DIR: "enforcer/recipe-basic-validations"
+    TF_MODULE_DIR: enforcer/recipe-basic-validations
 
 includes:
     tf:
-        taskfile: './../../DX/taskfile/Taskfile.terraform.yml'
-        dir: 'enforcer/recipe-basic-validations'
+        taskfile: ./../../DX/taskfile/Taskfile.terraform.yml
+        dir: enforcer/recipe-basic-validations
 
     common:
-        taskfile: './../../DX/taskfile/Taskfile.common.yml'
-        dir: 'enforcer/recipe-basic-validations'
+        taskfile: ./../../DX/taskfile/Taskfile.common.yml
+        dir: enforcer/recipe-basic-validations
 
 tasks:
     clean:
         cmds:
-            - task: 'common:clean'
+            - task: common:clean
 
     recipe-pass:
         dir: '{{ .TF_MODULE_DIR }}'
-        deps: [ 'clean' ]
+        deps: [clean]
         cmds:
           # Run example recipe: 'All checks passed'
-          - task: 'tf:init'
-          - task: 'tf:plan-vars'
-            vars:
-                TF_VARS_FILE: config/fixtures_basic_rules.tfvars
+            - task: tf:init
+            - task: tf:plan-vars
+              vars:
+                  TF_VARS_FILE: config/fixtures_basic_rules.tfvars
 
     recipe-fail-enforced-tag-failed:
-      dir: '{{ .TF_MODULE_DIR }}'
-      deps: [ 'clean' ]
-      cmds:
+        dir: '{{ .TF_MODULE_DIR }}'
+        deps: [clean]
+        cmds:
         # Run example recipe: 'A required enforced tag is missing'
-        - task: 'tf:init'
-        - task: 'tf:plan-vars-no-error'
-          vars:
-            TF_VARS_FILE: config/fixtures_basic_rules_failed_missing_enforced.tfvars
+            - task: tf:init
+            - task: tf:plan-vars-no-error
+              vars:
+                  TF_VARS_FILE: config/fixtures_basic_rules_failed_missing_enforced.tfvars
 
     recipe-fail-tag-key-with-empty-values:
-      dir: '{{ .TF_MODULE_DIR }}'
-      deps: [ 'clean' ]
-      cmds:
+        dir: '{{ .TF_MODULE_DIR }}'
+        deps: [clean]
+        cmds:
         # Run example recipe: 'Some tag keys have empty values'
-        - task: 'tf:init'
-        - task: 'tf:plan-vars-no-error'
-          vars:
-            TF_VARS_FILE: config/fixtures_basic_rules_failed_empty_values.tfvars
+            - task: tf:init
+            - task: tf:plan-vars-no-error
+              vars:
+                  TF_VARS_FILE: config/fixtures_basic_rules_failed_empty_values.tfvars
 
     recipe-fail-tag-value-non-trimmed:
-      dir: '{{ .TF_MODULE_DIR }}'
-      deps: [ 'clean' ]
-      cmds:
+        dir: '{{ .TF_MODULE_DIR }}'
+        deps: [clean]
+        cmds:
         # Run example recipe: 'Some values of tags, are passed empty, or with whitespaces.'
-        - task: 'tf:init'
-        - task: 'tf:plan-vars-no-error'
-          vars:
-            TF_VARS_FILE: config/fixtures_basic_rules_failed_non_trimmed_values.tfvars
-
-
+            - task: tf:init
+            - task: tf:plan-vars-no-error
+              vars:
+                  TF_VARS_FILE: config/fixtures_basic_rules_failed_non_trimmed_values.tfvars

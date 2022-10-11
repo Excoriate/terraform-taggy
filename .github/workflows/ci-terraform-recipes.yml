@@ -1,0 +1,73 @@
+---
+name: 'CI: IaC terraform Recipes'
+
+on:
+    push:
+        branches:
+            - main
+            - master
+    pull_request:
+        branches:
+            - main
+            - master
+
+defaults:
+    run:
+        shell: bash
+
+env:
+    WORKING_DIR_AWS: terraform/examples/aws/recipe-basic-validations
+
+
+jobs:
+    ci-aws-recipes:
+        name: AWS Recipes
+
+        strategy:
+            fail-fast: false
+            matrix:
+                include:
+                    - name: aws-recipe-pass
+                      config: config/fixtures_default_rules_pass.tfvars
+
+                    - name: recipe-fail-invalid-aws-prefix
+                      config: config/recipe-fail-invalid-aws-prefix
+
+                    - name: recipe-fail-invalid-aws-prefix
+                      config: config/recipe-fail-invalid-aws-prefix
+
+                    - name: recipe-fail-max-key-length-reached
+                      config: config/fixtures_default_rules_failed_max_tag_key_length.tfvars
+
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: $WORKING_DIR_AWS
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v2
+
+            - name: Setup Terraform
+              uses: hashicorp/setup-terraform@v1
+              with:
+                  terraform_version: 1.2.5
+                  terraform_wrapper: false
+
+
+            - name: Terraform Init
+              run: |
+                  rm -f .terraform.lock.hcl
+                  terraform init -backend=false
+
+            - name: Terraform Plan
+              run: |
+                  terraform plan \
+                      -var-file=${{ matrix.config }} \
+                      -lock=false
+
+            - name: Terraform Apply
+              run: |
+                  terraform apply \
+                      -var-file=${{ matrix.config }} \
+                      -lock=false -auto-approve

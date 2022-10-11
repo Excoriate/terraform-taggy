@@ -4,4 +4,3 @@ module "recipe_basic_validations" {
 
   tags = var.tags
 }
-

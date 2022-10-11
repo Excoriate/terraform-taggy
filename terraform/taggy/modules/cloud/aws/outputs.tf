@@ -19,4 +19,3 @@ output "result" {
   - "FAIL" - One or more resources are missing required tags, or have failed one or more validations.
 EOF
 }
-
