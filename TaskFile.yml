@@ -17,7 +17,8 @@ includes:
 tasks:
     docs:
         cmds:
-            - ./DX/scripts/generate-terraform-docs.sh --dir=terraform/taggy/omd
+            - ./DX/scripts/generate-terraform-docs.sh --dir=terraform/taggy/modules/omd
+            - ./DX/scripts/generate-terraform-docs.sh --dir=terraform/taggy/modules/cloud
 
     default:
         cmds:
