@@ -40,6 +40,9 @@ jobs:
                       config: config/fixtures_default_rules_failed_max_tag_key_length.tfvars
 
         runs-on: ubuntu-latest
+
+        # Since there are expected 'failures' in the test suite
+        continue-on-error: true
         defaults:
             run:
                 working-directory: '${{ env.WORKING_DIR_AWS }}'
