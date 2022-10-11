@@ -36,7 +36,7 @@ tasks:
       cmds:
         # Run example recipe: 'A required enforced tag is missing'
         - task: 'tf:init'
-        - task: 'tf:plan-vars'
+        - task: 'tf:plan-vars-no-error'
           vars:
             TF_VARS_FILE: config/fixtures_basic_rules_failed_missing_enforced.tfvars
 
@@ -46,9 +46,10 @@ tasks:
       cmds:
         # Run example recipe: 'Some tag keys have empty values'
         - task: 'tf:init'
-        - task: 'tf:plan-vars'
+        - task: 'tf:plan-vars-no-error'
           vars:
             TF_VARS_FILE: config/fixtures_basic_rules_failed_empty_values.tfvars
+            TF_IGNORE_ERRORS: 'true'
 
     recipe-fail-tag-value-non-trimmed:
       dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
@@ -56,10 +57,9 @@ tasks:
       cmds:
         # Run example recipe: 'Some values of tags, are passed empty, or with whitespaces.'
         - task: 'tf:init'
-        - task: 'tf:plan-vars'
+        - task: 'tf:plan-vars-no-error'
           vars:
             TF_VARS_FILE: config/fixtures_basic_rules_failed_non_trimmed_values.tfvars
-
-
+            TF_IGNORE_ERRORS: 'true'
 
 
