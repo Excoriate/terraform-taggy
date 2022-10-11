@@ -11,12 +11,55 @@ includes:
         taskfile: './../../DX/taskfile/Taskfile.terraform.yml'
         dir: 'enforcer/recipe-simple'
 
+    common:
+        taskfile: './../../DX/taskfile/Taskfile.common.yml'
+        dir: 'enforcer/recipe-simple'
+
 tasks:
-    init:
-        dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
+    clean:
         cmds:
+            - task: 'common:clean'
+
+    recipe-pass:
+        dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
+        deps: [ 'clean' ]
+        cmds:
+          # Run example recipe: 'All checks passed'
           - task: 'tf:init'
           - task: 'tf:plan-vars'
             vars:
                 TF_VARS_FILE: config/fixtures_basic_rules.tfvars
+
+    recipe-fail-enforced-tag-failed:
+      dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
+      deps: [ 'clean' ]
+      cmds:
+        # Run example recipe: 'A required enforced tag is missing'
+        - task: 'tf:init'
+        - task: 'tf:plan-vars'
+          vars:
+            TF_VARS_FILE: config/fixtures_basic_rules_failed_missing_enforced.tfvars
+
+    recipe-fail-tag-key-with-empty-values:
+      dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
+      deps: [ 'clean' ]
+      cmds:
+        # Run example recipe: 'Some tag keys have empty values'
+        - task: 'tf:init'
+        - task: 'tf:plan-vars'
+          vars:
+            TF_VARS_FILE: config/fixtures_basic_rules_failed_empty_values.tfvars
+
+    recipe-fail-tag-value-non-trimmed:
+      dir: '{{ .EXAMPLES_RECIPE_ENFORCER_SIMPLE_DIR }}'
+      deps: [ 'clean' ]
+      cmds:
+        # Run example recipe: 'Some values of tags, are passed empty, or with whitespaces.'
+        - task: 'tf:init'
+        - task: 'tf:plan-vars'
+          vars:
+            TF_VARS_FILE: config/fixtures_basic_rules_failed_non_trimmed_values.tfvars
+
+
+
 

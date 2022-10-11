@@ -19,6 +19,12 @@ tasks:
         cmds:
             - task: 'common:default'
 
-    enforcer-basic:
+    omd-enforcer-recipes-basics:
         cmds:
-            - task: 'omd:init'
+            - task: 'omd:recipe-pass'
+            - task: 'omd:recipe-fail-enforced-tag-failed'
+              ignore_error: true
+            - task: 'omd:recipe-fail-tag-key-with-empty-values'
+              ignore_error: true
+            - task: 'omd:recipe-fail-tag-value-non-trimmed'
+              ignore_error: true

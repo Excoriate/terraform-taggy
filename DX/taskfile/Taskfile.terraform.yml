@@ -25,3 +25,19 @@ tasks:
     desc: "Run Terraform plan"
     cmds:
       - terraform plan {{ .CLI_ARGS }}
+
+  fmt:
+    desc: "Run Terraform fmt check"
+    cmds:
+      - terraform fmt -recursive -write=false {{ .CLI_ARGS }}
+
+  fmt-fix:
+    desc: "Run Terraform fmt fixing the unformatted files"
+    cmds:
+      - terraform fmt -recursive -write=true {{ .CLI_ARGS }}
+
+  lint:
+    desc: "Run Terraform lint"
+    cmds:
+      - tflint --init
+      - tflint --error-with-issues {{ .CLI_ARGS }}
