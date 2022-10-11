@@ -31,10 +31,10 @@ jobs:
                       config: config/fixtures_default_rules_pass.tfvars
 
                     - name: recipe-fail-invalid-aws-prefix
-                      config: config/recipe-fail-invalid-aws-prefix
+                      config: config/recipe-fail-invalid-aws-prefix.tfvars
 
                     - name: recipe-fail-invalid-aws-prefix
-                      config: config/recipe-fail-invalid-aws-prefix
+                      config: config/recipe-fail-invalid-aws-prefix.tfvars
 
                     - name: recipe-fail-max-key-length-reached
                       config: config/fixtures_default_rules_failed_max_tag_key_length.tfvars
