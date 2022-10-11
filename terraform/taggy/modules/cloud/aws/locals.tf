@@ -1,6 +1,7 @@
 locals {
   // control flags
-  is_enabled = var.is_enabled ? 1 : 0
+  is_enabled                = var.is_enabled ? 1 : 0
+  is_acm_validation_enabled = var.is_enabled && var.enforce_acm_certificate_limit ? 1 : 0
 
   // Tag restrictions, documented officially by AWS. Ref: https://docs.aws.amazon.com/acm/latest/userguide/tags-restrictions.html
   aws_limits = {
